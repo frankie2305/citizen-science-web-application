@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Citizen Science</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/static/css/style.css" type="text/css">
+
+	<!-- Include Handlebars from a CDN -->
+	<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+	<script src="/static/js/main.js" type=module defer></script>
+</head>
+
+<body>
+
+	<header>
+		<div id="logo"><a href="#">Citizen Science</a></div>
+		<nav>
+			<ul>
+				<li><a href="#">Home</a></li>
+				<li><a href="#!/users">Users</a></li>
+				<li><a href="#!/observations">Observations</a></li>
+				<li><a href="#!/submit">Submit an observation</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<div id="content">
+
+		<div id="heading">
+
+			<hgroup>
+				<h1>Citizen Science</h1>
+				<h2>Understanding Our Trees</h2>
+			</hgroup>
+
+		</div>
+
+		<div id="target"></div>
+
+		<footer>
+
+			<div id="social">
+				<ul>
+					<li id="social-twitter"><a href="#">Twitter</a></li>
+					<li id="social-facebook"><a href="#">Facebook</a></li>
+					<li id="social-instagram"><a href="#">Instagram</a></li>
+				</ul>
+			</div>
+
+			<ul class="footer-tos">
+				<li><a href="#">Terms</a></li>
+				<li><a href="#">Privacy</a></li>
+				<li><a href="#">Cookies</a></li>
+			</ul>
+
+			<p id="copyright">All content and images subject to copyright &copy; COMP2110 Citizen Science 2020.</p>
+		</footer>
+
+		<!-- Templates -->
+		<script id="home-template" type="text/x-handlebars-template">
+			<div id="observations">
+				<h3>Recent Observations</h3>
+				<ul id="recent-observations-list">
+					{{#each observations}}
+						<li>
+							<div>{{formatted_timestamp}}</div>
+							<a href="/#!/observations/{{id}}">{{location}}, {{weather}}</a>
+						</li>
+					{{/each}}
+				</ul>
+			</div>
+
+			<div id="users">
+				<h3>Top 10 Users</h3>
+				<ul id="top-10-users-list">
+					{{#each users}}
+						<li>
+							<div>Rank {{rank}}</div>
+							<a href="/#!/users/{{id}}">{{first_name}} {{last_name}}</a>
+						</li>
+					{{/each}}
+				</ul>
+			</div>
+		</script>
+
+		<script id="observations-list-template" type="text/x-handlebars-template">
+			<div id="observations">
+				<h3>List of Observations</h3>
+				<ul id="observations-list">
+					{{#each observations}}
+						<li>
+							<div>{{formatted_timestamp}}</div>
+							<a href="/#!/observations/{{id}}">{{location}}, {{weather}}</a>
+						</li>
+					{{/each}}
+				</ul>
+			</div>
+		</script>
+
+		<script id="observation-template" type="text/x-handlebars-template">
+			<h3>{{observation.formatted_timestamp}}</h3>
+				<ul>
+					{{#with user}}
+						<li>Participant: <a href="/#!/users/{{id}}">{{first_name}} {{last_name}}</a></li>
+					{{/with}}
+					{{#with observation}}
+						<li>Temperature: {{temperature}} &#8451;</li>
+						<li>Weather: {{weather}}</li>
+						<li>Wind: {{wind}}</li>
+						<li>Location: {{location}}</li>
+						<li>Height: {{height}} m</li>
+						<li>Girth: {{girth}} m</li>
+						<li>Leaf size: {{leaf_size}}</li>
+						<li>Leaf shape: {{leaf_shape}}</li>
+						<li>Bark colour: {{bark_colour}}</li>
+						<li>Bark texture: {{bark_texture}}</li>
+					{{/with}}
+				</ul>
+    	</script>
+
+		<script id="users-list-template" type="text/x-handlebars-template">
+			<div id="users">
+				<h3>User Leaderboard</h3>
+				<ul id="users-list">
+					{{#each users}}
+						<li>
+							<div>Rank {{rank}}</div>
+							<a href="/#!/users/{{id}}">{{first_name}} {{last_name}}</a>
+						</li>
+					{{/each}}
+				</ul>
+			</div>
+		</script>
+
+		<script id="user-template" type="text/x-handlebars-template">
+			{{#with user}}
+				<img src="{{avatar}}" alt="{{first_name}} {{last_name}}'s avatar">
+				<h3>{{first_name}} {{last_name}}'s Profile</h3>
+				<p>First name: {{first_name}}</p>
+				<p>Last name: {{last_name}}</p>
+				<p>Email: {{email}}</p>
+			{{/with}}
+			{{#if plural}}
+				<p>Participated in {{observations.length}} observations</p>
+			{{else}}
+				<p>Participated in 1 observation</p>
+			{{/if}}
+			<ul id="user-observations-list">
+				{{#each observations}}
+					<li>
+						<div>{{formatted_timestamp}}</div>
+						<a href="/#!/observations/{{id}}">{{location}}, {{weather}}</a>
+					</li>
+				{{/each}}
+			</ul>
+    	</script>
+
+		<script id="404-error-template" type="text/x-handlebars-template">
+			<h1 class="failed">Oops!</h1>
+			<p>The {{target}} you are looking for does not exist.</p>
+			<small>Go back to <a href="#">homepage</a>.</small>
+		</script>
+
+		<script id="observation-form-template" type="text/x-handlebars-template">
+			<h3>Add a new observation</h3>
+			<div id="errors"></div>
+			<form id="observation-form">
+				<fieldset>
+					<legend>Observation Form</legend>
+					<input type="hidden" name="participant" value="0">
+					<label for="temperature">Temperature</label>
+					<input type="number" name="temperature" id="temperature">
+					<label for="weather">Weather</label>
+					<select name="weather" id="weather">
+						<option disabled>Select one</option>
+						<option value=""></option>
+						<option value="fine">fine</option>
+						<option value="raining">raining</option>
+						<option value="sunny">sunny</option>
+						<option value="stormy">stormy</option>
+					</select>
+					<label for="wind">Wind</label>
+					<select name="wind" id="wind">
+						<option disabled>Select one</option>
+						<option value=""></option>
+						<option value="none">none</option>
+						<option value="light">light</option>
+						<option value="medium">medium</option>
+						<option value="strong">strong</option>
+					</select>
+					<label for="location">Location</label>
+					<input type="text" name="location" id="location">
+					<label for="height">Height</label>
+					<input type="number" name="height" id="height" step="0.1">
+					<label for="girth">Girth</label>
+					<input type="number" name="girth" id="girth" step="0.01">
+					<label for="leaf_size">Leaf size</label>
+					<select name="leaf_size" id="leaf_size">
+						<option disabled>Select one</option>
+						<option value=""></option>
+						<option value="small">small</option>
+						<option value="medium">medium</option>
+						<option value="large">large</option>
+					</select>
+					<label for="leaf_shape">Leaf shape</label>
+					<select name="leaf_shape" id="leaf_shape">
+						<option disabled>Select one</option>
+						<option value=""></option>
+						<option value="rounded">rounded</option>
+						<option value="pointy">pointy</option>
+						<option value="divided">divided</option>
+					</select>
+					<label for="bark_colour">Bark colour</label>
+					<select name="bark_colour" id="bark_colour">
+						<option disabled>Select one</option>
+						<option value=""></option>
+						<option value="grey">grey</option>
+						<option value="red">red</option>
+						<option value="silver">silver</option>
+						<option value="brown">brown</option>
+					</select>
+					<label for="bark_texture">Bark texture</label>
+					<select name="bark_texture" id="bark_texture">
+						<option disabled>Select one</option>
+						<option value=""></option>
+						<option value="smooth">smooth</option>
+						<option value="peeling">peeling</option>
+						<option value="crinkles">crinkles</option>
+						<option value="furry">furry</option>
+						<option value="spotty">spotty</option>
+					</select>
+					<input type="submit" value="Submit">
+				</fieldset>
+			</form>
+		</script>
+
+		<script id="errors-list-template" type="text/x-handlebars-template">
+			<h1 class="failed">Errors occurred while submitting the form!</h1>
+			<ul>
+				{{#each errors}}
+					<li>{{this}}</li>
+				{{/each}}
+			</ul>
+			<small>Please fix them and try again later.</small>
+		</script>
+	</div>
+</body>
+
+</html>
