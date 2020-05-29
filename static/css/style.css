@@ -34,6 +34,11 @@ a {
     transition: all 1s ease 0s;
 }
 
+a.active {
+    color: var(--primary-txt-color);
+    border-bottom: 3px solid var(--primary-txt-color);
+}
+
 a:hover {
 	color: var(--primary-txt-color);
 }
@@ -165,10 +170,6 @@ footer {
     margin-top: 25px;
 	padding: 25px;
     border: 1px solid var(--secondary-txt-color);
-}
-
-#social {
-	border-radius: 50px;
 }
 
 #social ul, .footer-tos {

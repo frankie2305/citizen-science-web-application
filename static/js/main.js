@@ -2,6 +2,7 @@ import { Model } from './model.js';
 import * as views from './views.js';
 import { setTitle } from './title.js';
 import { split_hash } from './util.js';
+import { styleActiveTab } from './tabs.js';
 import { observationFormSubmit, scrollToErrors } from './form.js';
 
 // redraw - retrieves the latest lists of observations + users
@@ -29,68 +30,71 @@ window.addEventListener('modelUpdated', e => {
 
     // '' => displays Main Page
     if (hash === '') {
+        styleActiveTab('');
         const observations = e.detail.get_recent_observations(10);
         const users = e.detail.get_user_leaderboard().slice(0, 10);
         views.homeView('target', { observations, users });
         setTitle();
-    }
-
-    // uses split_hash() to get the path and id (if any) of the URL 
-    const path = split_hash(hash).path;
-    const id = split_hash(hash).id;
-
-    if (path === 'observations') {
-
-        // '#!/observations' => displays Observation List View
-        if (!id) {
-            views.listObservationsView('target', e.detail.get_recent_observations(e.detail.get_observations().length));
-            setTitle('List of Observations');
-        }
+    } else {
+        // uses split_hash() to get the path and id (if any) of the URL 
+        const path = split_hash(hash).path;
+        const id = split_hash(hash).id;
         
-        // '#!/observations/<id>' => displays Observation Detail View if observation exists
-        //  otherwise displays a 404 error page
-        else {
-            const observation = e.detail.get_observation(id);
-            if (observation) {
-                const user = e.detail.get_user(observation.participant);
-                views.observationView('target', { observation, user });
-                setTitle(`${observation.formatted_timestamp}`);
-            } else {
-                views.error404View('target', 'observation');
-                setTitle('Observation Not Found');
+        styleActiveTab(`#!/${path}`);
+
+        if (path === 'observations') {
+
+            // '#!/observations' => displays Observation List View
+            if (!id) {
+                views.listObservationsView('target', e.detail.get_recent_observations(e.detail.get_observations().length));
+                setTitle('List of Observations');
+            }
+            
+            // '#!/observations/<id>' => displays Observation Detail View if observation exists
+            //  otherwise displays a 404 error page
+            else {
+                const observation = e.detail.get_observation(id);
+                if (observation) {
+                    const user = e.detail.get_user(observation.participant);
+                    views.observationView('target', { observation, user });
+                    setTitle(`${observation.formatted_timestamp}`);
+                } else {
+                    views.error404View('target', 'observation');
+                    setTitle('Observation Not Found');
+                }
             }
         }
-    }
 
-    if (path === 'users') {
+        if (path === 'users') {
 
-        // '#!/users' => displays Leaderboard View
-        if (!id) {
-            views.listUsersView('target', e.detail.get_user_leaderboard());
-            setTitle('User Leaderboard');
-        }
-        
-        // '#!/users/<id>' => displays User Profile View if user exists
-        //  otherwise displays a 404 error page
-        else {
-            const user = e.detail.get_user(id);
-            if (user) {
-                const observations = e.detail.get_user_observations(id);
-                const plural = observations.length !== 1;
-                views.userView('target', { user, observations, plural });
-                setTitle(`${user.first_name} ${user.last_name}'s Profile`);
-            } else {
-                views.error404View('target', 'user');
-                setTitle('User Not Found');
+            // '#!/users' => displays Leaderboard View
+            if (!id) {
+                views.listUsersView('target', e.detail.get_user_leaderboard());
+                setTitle('User Leaderboard');
+            }
+            
+            // '#!/users/<id>' => displays User Profile View if user exists
+            //  otherwise displays a 404 error page
+            else {
+                const user = e.detail.get_user(id);
+                if (user) {
+                    const observations = e.detail.get_user_observations(id);
+                    const plural = observations.length !== 1;
+                    views.userView('target', { user, observations, plural });
+                    setTitle(`${user.first_name} ${user.last_name}'s Profile`);
+                } else {
+                    views.error404View('target', 'user');
+                    setTitle('User Not Found');
+                }
             }
         }
-    }
 
-    // '#!/submit' => displays Observation Form
-    if (path === 'submit') {
-        views.observationFormView('target');
-        observationFormSubmit(e);
-        setTitle('Add a new observation');
+        // '#!/submit' => displays Observation Form
+        if (path === 'submit') {
+            views.observationFormView('target');
+            observationFormSubmit(e);
+            setTitle('Add a new observation');
+        }
     }
 
 });

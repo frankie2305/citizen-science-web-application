@@ -22,6 +22,7 @@ There are a few Javascript files in the project:
 * `util.js` provides a utility function that deals with a hash path, which is essential for the views as only 1 HTML page `index.html` will be loaded from the server
 * `views.js` has a few view functions to display views to users
 * `form.js` has 2 functions responsible for the submission of the observation form and scrolling to errors if form submission is unsuccessful
+* `tabs.js` has a function to style the current active tab in the navigation bar
 * `title.js` has a function to create dynamic titles for different pages
 
 The `cypress` directory contains tests to be run with the [Cypress](https://cypress.io) testing tool.
