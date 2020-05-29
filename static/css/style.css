@@ -189,6 +189,10 @@ footer {
 	color: var(--primary-txt-color);
 }
 
-.failed {
+h4, small, .error {
     color:#d9534f;
+}
+
+.error {
+    margin-bottom: 25px;
 }

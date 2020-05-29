@@ -165,13 +165,14 @@
 
 		<script id="observation-form-template" type="text/x-handlebars-template">
 			<h3>Add a New Observation</h3>
-			<div id="errors"></div>
+			<div id="error-alert"></div>
 			<form id="observation-form">
 				<fieldset>
 					<legend>Observation Form</legend>
 					<input type="hidden" name="participant" value="0">
 					<label for="temperature">Temperature</label>
 					<input type="number" name="temperature" id="temperature">
+					<div class="error" id="missing_temperature"></div>
 					<label for="weather">Weather</label>
 					<select name="weather" id="weather">
 						<option disabled>Select one</option>
@@ -181,6 +182,7 @@
 						<option value="sunny">sunny</option>
 						<option value="stormy">stormy</option>
 					</select>
+					<div class="error" id="missing_weather"></div>
 					<label for="wind">Wind</label>
 					<select name="wind" id="wind">
 						<option disabled>Select one</option>
@@ -190,12 +192,16 @@
 						<option value="medium">medium</option>
 						<option value="strong">strong</option>
 					</select>
+					<div class="error" id="missing_wind"></div>
 					<label for="location">Location</label>
 					<input type="text" name="location" id="location">
+					<div class="error" id="missing_location"></div>
 					<label for="height">Height</label>
 					<input type="number" name="height" id="height" step="0.1">
+					<div class="error" id="missing_height"></div>
 					<label for="girth">Girth</label>
 					<input type="number" name="girth" id="girth" step="0.01">
+					<div class="error" id="missing_girth"></div>
 					<label for="leaf_size">Leaf size</label>
 					<select name="leaf_size" id="leaf_size">
 						<option disabled>Select one</option>
@@ -204,6 +210,7 @@
 						<option value="medium">medium</option>
 						<option value="large">large</option>
 					</select>
+					<div class="error" id="missing_leaf_size"></div>
 					<label for="leaf_shape">Leaf shape</label>
 					<select name="leaf_shape" id="leaf_shape">
 						<option disabled>Select one</option>
@@ -212,6 +219,7 @@
 						<option value="pointy">pointy</option>
 						<option value="divided">divided</option>
 					</select>
+					<div class="error" id="missing_leaf_shape"></div>
 					<label for="bark_colour">Bark colour</label>
 					<select name="bark_colour" id="bark_colour">
 						<option disabled>Select one</option>
@@ -221,6 +229,7 @@
 						<option value="silver">silver</option>
 						<option value="brown">brown</option>
 					</select>
+					<div class="error" id="missing_bark_colour"></div>
 					<label for="bark_texture">Bark texture</label>
 					<select name="bark_texture" id="bark_texture">
 						<option disabled>Select one</option>
@@ -231,18 +240,14 @@
 						<option value="furry">furry</option>
 						<option value="spotty">spotty</option>
 					</select>
+					<div class="error" id="missing_bark_texture"></div>
 					<input type="submit" value="Add">
 				</fieldset>
 			</form>
 		</script>
 
-		<script id="errors-list-template" type="text/x-handlebars-template">
-			<h1 class="failed">Errors occurred while submitting the form!</h1>
-			<ul>
-				{{#each errors}}
-					<li>{{this}}</li>
-				{{/each}}
-			</ul>
+		<script id="error-alert-template" type="text/x-handlebars-template">
+			<h4>Errors occurred while submitting the form!</h4>
 			<small>Please fix them and try again later.</small>
 		</script>
 	</div>

@@ -6,7 +6,7 @@ export {
     userView,
     error404View,
     observationFormView,
-    listErrorsView
+    errorAlertView
 };
 
 // apply_template - applies a template to some data
@@ -67,8 +67,8 @@ const observationFormView = targetid => {
     apply_template(targetid, 'observation-form-template');
 }
 
-// listErrorsView - generates a view of errors in submitting
-//  the observation form and insert it at `targetid` in the DOM
-const listErrorsView = (targetid, errors) => {
-    apply_template(targetid, 'errors-list-template', { errors });
+// errorAlertView - generates a view of an error alert
+//  and insert it at `targetid` in the DOM
+const errorAlertView = (targetid) => {
+    apply_template(targetid, 'error-alert-template');
 }

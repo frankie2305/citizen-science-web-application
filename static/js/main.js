@@ -3,7 +3,7 @@ import * as views from './views.js';
 import { setTitle } from './title.js';
 import { split_hash } from './util.js';
 import { styleActiveTab } from './tabs.js';
-import { observationFormSubmit, scrollToErrors } from './form.js';
+import { observationFormSubmit, showErrors, scrollToErrorAlert } from './form.js';
 
 // redraw - retrieves the latest lists of observations + users
 //  from the server and emits an event called 'modelUpdated'
@@ -108,10 +108,12 @@ window.addEventListener('observationAdded', e => {
         window.location = `#!/users/${e.detail.observation.participant}`;
     }
 
-    // status is 'failed' => displays Error List View
+    // status is 'failed' => shows errors, displays Error Alert View 
+    //  and scrolls to it
     if (e.detail.status === 'failed') {
-        views.listErrorsView('errors', e.detail.errors);
-        scrollToErrors();
+        showErrors(e.detail.errors);
+        views.errorAlertView('error-alert');
+        scrollToErrorAlert();
         setTitle('Form Submission Failed');
     }
     

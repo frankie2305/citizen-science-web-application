@@ -21,7 +21,7 @@ There are a few Javascript files in the project:
 * `model.js` contains code to retrieve data from the API and methods to make data available to the application in the Model object
 * `util.js` provides a utility function that deals with a hash path, which is essential for the views as only 1 HTML page `index.html` will be loaded from the server
 * `views.js` has a few view functions to display views to users
-* `form.js` has 2 functions responsible for the submission of the observation form and scrolling to errors if form submission is unsuccessful
+* `form.js` has 3 functions responsible for submitting the observation form and showing errors as well as scrolling to the error alert if form submission is unsuccessful
 * `tabs.js` has a function to style the current active tab in the navigation bar
 * `title.js` has a function to create dynamic titles for different pages
 
@@ -40,7 +40,7 @@ The Python API server provides the following URLs serving JSON data:
 
 ## The Views
 
-There will be 7 views in the application, these are outlined here. Each page has a specific URL hash as shown here:
+There will be 8 views in the application, these are outlined here. Each page has a specific URL hash as shown here:
 
 * Main Page (`/`): contains some summary information, list of recent observations, current top 10 leaderboard of users and a link to the form to add an observation.  The user and observation entries link to their individual views (User Profile View and Observation Detail View).
 * Observation List View (`/#!/observations`): shows the complete list of observations, each observation includes at least the location and weather fields and links to the Observation Detail view.
@@ -48,4 +48,5 @@ There will be 7 views in the application, these are outlined here. Each page has
 * Observation Detail View (`/#!/observations/<id>`): shows the full details of one observation including all fields and also a link to the User Profile View.
 * User Profile View (`/#!/users/<id>`): shows the brief details of the user (name, email, avatar) and a complete list of the observations they have made, most recent first, each observation links to the Observation Detail view.
 * 404 Error View (`/#!/users/<id>` or `/#!/observations/<id>`): shows a 404 error page if the user or the observation with the id requested does not exist and prompts the user to go back to homepage
-* Observation Form (`/#!/submit`): a view containing the form to submit an observation. The user will fill out the form and submit it. If the form is incomplete, a list of errors will be shown above the form and the user will be able to fix them and resubmit.  If the submission is successful, the user is shown the User Profile View where the new observation will be included in the observation list.
+* Observation Form (`/#!/submit`): contains the form to submit an observation. The user will fill out the form and submit it. If the form is incomplete, a list of errors will be shown above the form and the user will be able to fix them and resubmit.  If the submission is successful, the user is shown the User Profile View where the new observation will be included in the observation list.
+* Error Alert View (`/#!/submit`): shows an error alert when form submission is unsuccessful

@@ -1,4 +1,4 @@
-export { observationFormSubmit, scrollToErrors };
+export { observationFormSubmit, showErrors, scrollToErrorAlert };
 
 // observationFormSubmit - when user submits the observation form, 
 //  all empty fields are removed before the model 
@@ -39,9 +39,23 @@ const observationFormSubmit = e => {
     });
 }
 
-// scrollToErrors - scrolls the errors while submitting
-//  the observation form into the user's view
-const scrollToErrors = () => {
-    const errors = document.querySelector('#errors');
-    errors.scrollIntoView();
+// showErrors - shows the errors below the missing fields
+//  errors - an array of errors to show
+const showErrors = errors => {
+    const errorFields = document.querySelectorAll('.error');
+    errorFields.forEach(errorField => {
+        errorField.innerText = '';
+    });
+    errors.forEach(error => {
+        const missingField = error.split(': ')[1];
+        const errorField = document.querySelector(`#missing_${missingField}`);
+        errorField.innerText = error;
+    });
+}
+
+// scrollToErrorAlert - scrolls the error alert
+//  into the user's view
+const scrollToErrorAlert = () => {
+    const errorAlert = document.querySelector('#error-alert');
+    errorAlert.scrollIntoView();
 }
