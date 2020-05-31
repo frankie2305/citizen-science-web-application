@@ -189,10 +189,7 @@ footer {
 	color: var(--primary-txt-color);
 }
 
-h4, small, .error {
-    color:#d9534f;
-}
-
 .error {
+    color:#d9534f;
     margin-bottom: 25px;
 }

@@ -15,12 +15,12 @@ export {
 //  templateid - id of the element containing the template
 //  data - data to pass to the template
 const apply_template = (targetid, templateid, data) => {
-
     let target = document.getElementById(targetid);
 
     let template = Handlebars.compile(
         document.getElementById(templateid).textContent
     );
+
     target.innerHTML = template(data);
 }
 
@@ -69,6 +69,6 @@ const observationFormView = targetid => {
 
 // errorAlertView - generates a view of an error alert
 //  and insert it at `targetid` in the DOM
-const errorAlertView = (targetid) => {
+const errorAlertView = targetid => {
     apply_template(targetid, 'error-alert-template');
 }

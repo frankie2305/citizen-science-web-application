@@ -93,7 +93,7 @@ window.addEventListener('modelUpdated', e => {
         if (path === 'submit') {
             views.observationFormView('target');
             observationFormSubmit(e);
-            setTitle('Add a new observation');
+            setTitle('Add a New Observation');
         }
     }
 
